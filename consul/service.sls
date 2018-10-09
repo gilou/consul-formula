@@ -53,6 +53,7 @@ consul-firewalld-service:
 consul-firewalld-zone:
   firewalld.present:
     - name: public
+    - prune_services: False
     - services:
       - consul
     - require:
