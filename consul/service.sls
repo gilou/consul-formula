@@ -35,6 +35,29 @@ consul-init-file:
     - mode: 0755
     {%- endif %}
 
+{%- if consul.firewalld_config %}
+consul-firewalld-service:
+  firewalld.service:
+    - name: consul
+    - ports:
+      {%- for service, port in consul.ports.items() %}
+        {%- if port != -1 %}
+        {%- if service in consul.tcp_ports %}
+      - {{ port }}/tcp
+        {%- endif %}
+        {%- if service in consul.udp_ports %}
+      - {{ port }}/udp
+        {%- endif %}
+        {%- endif %}
+      {%- endfor %}
+consul-firewalld-zone:
+  firewalld.present:
+    - name: public
+    - services:
+      - consul
+    - require:
+      - consul-firewalld-service
+{%- endif %}
 {%- if consul.service %}
 
 consul-service:

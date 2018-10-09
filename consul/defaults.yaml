@@ -7,6 +7,28 @@ consul:
   user: consul
   group: consul
 
+  # default ports for services
+  ports:
+    dns: 8600
+    http: 8500
+    https: -1
+    serf_lan: 8301
+    serf_wan: 8302
+    server: 8300
+    proxy_min_port: 20000
+    proxy_max_port: 20255
+  udp_ports:
+    - serf_lan
+    - serf_wan
+    - dns
+  tcp_ports:
+    - server
+    - serf_lan
+    - serf_wan
+    - http
+    - https
+  firewalld_config: False
+
   config:
     server: false
     bind_addr: 0.0.0.0
